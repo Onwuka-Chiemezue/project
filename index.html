@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
+  <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+  <title>Hydro's Language School</title>
+
+  <!-- i will move the style to a css file -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .product-card {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px;
+  width: 220px;
+  height: 360px; 
+  display: inline-block;
+  vertical-align: top; 
+  text-align: center;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+}
+    .product-card img {
+      width: 120px;
+      height: auto;
+      border-radius: 8px;
+    }
+  </style>
+  <!-- Css ends here note it down for transfer -->
+</head>
+
+<body>
+  <div id="webstore">
+    <h1>{{ message }}</h1>
+
+    <button v-on:click="showCheckout">
+      {{ itemInCart }}
+      <span class="fa-solid fa-cart-shopping"></span>
+      Checkout
+    </button>
+
+    <main>
+      <!-- Product list -->
+      <div v-if="showProduct">
+        <div v-for="product in products" :key="product.id" class="product-card">
+          <figure>
+            <img v-bind:src="product.image" :alt="product.title">
+          </figure>
+          <h2>{{ product.title }}</h2>
+          <p>{{ product.description }}</p>
+          <p><strong>Location: </strong>{{ product.location }}</p>
+          <p><strong>Price:</strong> ₦{{ product.price }}</p>
+          <p><strong>Availability: </strong>{{ product.availableInventory }}</p>
+
+          <button 
+            v-if="canAddToCart(product)" 
+            v-on:click="addItemtoCart(product)"
+          >
+            Add to cart
+          </button>
+
+          <div v-else>
+            <button disabled>Add to cart</button>
+            <p>No more items — Inventory empty!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout Page -->
+      <div v-else>
+        <h1>Welcome to the Checkout Page !!!</h1>
+        <p><strong>Name:</strong> <input type="text" v-model.trim="order.name"></p>
+        <p><strong>Surname:</strong> <input type="text" v-model.trim="order.surname"></p>
+        <p><strong>Address:</strong> <input v-model="order.address"></p>
+        <p><strong>City:</strong> <input v-model="order.city"/></p>
+        <p>
+          <strong>State:</strong>
+          <select v-model="order.state">
+            <option disabled value="">State</option>
+            <option>AL</option>
+            <option>AR</option>
+            <option>CA</option>
+            <option>NV</option>
+          </select>
+        </p>
+        <p><strong>Zip/Postal Code:</strong> <input v-model="order.zip"/></p>
+        <p>
+          <input type="checkbox" id="gift" value="true" v-model="order.gift">
+          <label for="gift">Ship As Gift?</label>
+        </p>
+        <p>
+          <input type="radio" id="home" value="Home" v-model="order.method">
+          <label for="home">Home</label>
+          <input type="radio" id="business" value="Business" v-model="order.method">
+          <label for="business">Business</label>
+        </p>
+        <!-- order INFORMATION  -->
+        <h2>Order Information</h2>
+        <p>First Name: {{ order.name }}</p>
+        <p>Surname: {{ order.surname }}</p>
+        <p>Address: {{ order.address }}</p>
+        <p>City: {{ order.city }}</p>
+        <p>State: {{ order.state }}</p>
+        <p>Zip: {{ order.zip }}</p>
+        <p>Method: {{order.method}}</p>
+        <button v-on:click="submitForm">Place Order</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    let webstore = new Vue({
+      el: '#webstore',
+      data: {
+        message: 'Welcome To Hydros Language School',
+        showProduct: true,
+        products: [
+          {
+            id: 1001,
+            title: 'English Language',
+            description: 'Dive in and uplift your English literature.',
+            image: 'images/ukflag.webp',
+            location: 'BIRMINGHAM',
+            availableInventory: 7,
+            price: 2000
+        
+          },
+          {
+            id: 1002,
+            title: 'French Language',
+            description: 'Learn rich French dialects and communication styles.',
+            price: 1800,
+            location: 'PARIS',
+            image: 'images/frenchflag.webp',
+            availableInventory: 5
+          },
+          {
+            id: 1003,
+            title: 'Spanish Language',
+            description: 'Learn rich Spanish dialects and communication styles.',
+            price: 1800,
+            location: 'MADRID',
+            image: 'images/spanishflag.webp',
+            availableInventory: 7
+          },
+          {
+            id: 1004,
+            title: 'Chinese Language',
+            description: 'Learn rich Chinese dialects and communication styles.',
+            price: 1800,
+            location: 'HONG-KONG',
+            image: 'images/chineseflag.webp',
+            availableInventory: 10
+          },
+          {
+            id: 1005,
+            title: 'Hindi Language',
+            description: 'Learn rich Hindi dialects and communication styles.',
+            price: 1800,
+            location: 'MUMBAI',
+            image: 'images/hindiflag.webp',
+            availableInventory: 12
+          },
+          {
+            id: 1006,
+            title: 'Arabic Language',
+            description: 'Learn rich Arabic dialects and communication styles.',
+            price: 1800,
+            location: 'CAIRO',
+            image: 'images/arabicflag.webp',
+            availableInventory: 14
+          },
+          {
+            id: 1008,
+            title: 'Russian Language',
+            description: 'Learn rich Russian dialects and communication styles.',
+            price: 1800,
+            location: 'MOSCOW',
+            image: 'images/russianflag.webp',
+            availableInventory: 5
+          },
+          {
+            id: 1009,
+            title: 'Nigerian Language/Pidgin',
+            description: 'Learn rich Nigerian dialects and communication styles.',
+            price: 1800,
+            location: 'LAGOS',
+            image: 'images/nigerianflag.webp',
+            availableInventory: 9
+          },
+          {
+            id: 1010,
+            title: 'Italian Language',
+            description: 'Learn rich Italian dialects and communication styles.',
+            price: 1800,
+            location: 'MILAN',
+            image: 'images/italianflag.webp',
+            availableInventory: 11
+          },
+          {
+            id: 1011,
+            title: 'Korean Language',
+            description: 'Learn rich Korean dialects and communication styles.',
+            price: 1800,
+            location: 'SEOUL',
+            image: 'images/kpreanflag.jpeg',
+            availableInventory: 9
+          }
+
+        ],
+        order: {
+          name: '',
+          surname: '',
+          address: '',
+          city: '',
+          state: '',
+          zip: '',
+          method: 'Home',
+          gift: false
+        },
+        cart: []
+      },
+
+      methods: {
+        addItemtoCart(product) {
+          this.cart.push(product.id);
+        },
+        showCheckout() {
+          this.showProduct = !this.showProduct;
+        }
+      },
+
+      computed: {
+        itemInCart() {
+          return this.cart.length || '';
+        },
+        canAddToCart() {
+          return (product) => {
+            const count = this.cart.filter(id => id === product.id).length;
+            return product.availableInventory > count;
+          };
+        }
+      }
+    });
+  </script>
+</body>
+</html>
