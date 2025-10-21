@@ -18,6 +18,10 @@
 
     /* HEADER SECTION */
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       background: linear-gradient(90deg, #0078ff, #00c6ff);
       color: white;
       padding: 20px 50px;
@@ -25,6 +29,7 @@
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
     }
 
     header h1 {
@@ -54,7 +59,7 @@
     /* PRODUCT GRID SECTION */
     main {
       text-align: center;
-      padding: 40px;
+      padding: 120px 40px 40px; 
     }
 
     .products-container {
@@ -261,7 +266,8 @@
           { id: 1007, title: 'Russian Language', description: 'Learn rich Russian dialects and communication styles.', price: 1800, location: 'MOSCOW', image: 'images/russianflag.webp', availableInventory: 5 },
           { id: 1008, title: 'Nigerian Language/Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', price: 1800, location: 'LAGOS', image: 'images/nigerianflag.webp', availableInventory: 9 },
           { id: 1009, title: 'Italian Language', description: 'Learn rich Italian dialects and communication styles.', price: 1800, location: 'MILAN', image: 'images/italianflag.webp', availableInventory: 11 },
-          { id: 1010, title: 'Korean Language', description: 'Learn rich Korean dialects and communication styles.', price: 1800, location: 'SEOUL', image: 'images/kpreanflag.jpeg', availableInventory: 9 }
+          { id: 1010, title: 'Korean Language', description: 'Learn rich Korean dialects and communication styles.', price: 1800, location: 'SEOUL', image: 'images/kpreanflag.jpeg', availableInventory: 9 },
+          { id: 1011, title: 'Portugese Language', description: 'Learn rich portugese dialects and communication styles.', price: 1800, Location: 'LISBON', image: 'images/portuflag.webp', availableInventory: 11}
         ],
         order: {
           name: '',
