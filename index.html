@@ -7,7 +7,6 @@
   <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
   <title>Hydro's Language School</title>
 
-  <!-- CSS STYLING -->
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -16,7 +15,7 @@
       background: #f6f8fb;
     }
 
-    /* HEADER SECTION */
+    /* HEADER */
     header {
       position: fixed;
       top: 0;
@@ -56,7 +55,7 @@
       color: #fff;
     }
 
-    /* PRODUCT GRID SECTION */
+    /* MAIN BODY */
     main {
       text-align: center;
       padding: 120px 40px 40px; 
@@ -118,10 +117,17 @@
       background: #005fcc;
     }
 
-    /* CHECKOUT PAGE STYLING */
-    .checkout {
-      max-width: 500px;
-      margin: 50px auto;
+    /* CHECKOUT PAGE - SPLIT LAYOUT */
+    .checkout-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .checkout, .cart-summary {
+      flex: 1;
+      min-width: 300px;
       background: white;
       padding: 30px;
       border-radius: 15px;
@@ -152,19 +158,40 @@
       background: #005fcc;
     }
 
-    /* SMALLER SCREENS */
-    @media (max-width: 600px) {
-      header {
+    /* CART SUMMARY */
+    .cart-summary h2 {
+      text-align: center;
+      color: #0078ff;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .cart-item img {
+      width: 60px;
+      height: 40px;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    .cart-item-details {
+      text-align: left;
+    }
+
+    .cart-total {
+      font-weight: bold;
+      text-align: right;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 700px) {
+      .checkout-container {
         flex-direction: column;
-        gap: 10px;
-      }
-
-      header h1 {
-        font-size: 22px;
-      }
-
-      .product-card {
-        width: 90%;
       }
     }
   </style>
@@ -173,7 +200,7 @@
 <body>
   <div id="webstore">
 
-    <!-- HEADER SECTION -->
+    <!-- HEADER -->
     <header>
       <h1>{{ message }}</h1>
       <button v-on:click="showCheckout">
@@ -184,7 +211,7 @@
     </header>
 
     <main>
-      <!-- PRODUCT LIST -->
+      <!-- PRODUCT GRID -->
       <div v-if="showProduct" class="products-container">
         <div v-for="product in products" :key="product.id" class="product-card">
           <figure>
@@ -204,48 +231,71 @@
             <button disabled>Add to cart</button>
             <p>Inventory empty!</p>
           </div>
+
+          <button v-on:click="removeItemFromCart(product)">
+            Remove
+          </button>
         </div>
       </div>
 
       <!-- CHECKOUT PAGE -->
-      <div v-else class="checkout">
-        <h1>Checkout Page</h1>
-        <p><strong>Name:</strong> <input type="text" v-model.trim="order.name"></p>
-        <p><strong>Surname:</strong> <input type="text" v-model.trim="order.surname"></p>
-        <p><strong>Address:</strong> <input v-model="order.address"></p>
-        <p><strong>City:</strong> <input v-model="order.city"/></p>
-        <p>
-          <strong>State:</strong>
-          <select v-model="order.state">
-            <option disabled value="">State</option>
-            <option>AL</option>
-            <option>AR</option>
-            <option>CA</option>
-            <option>NV</option>
-          </select>
-        </p>
-        <p><strong>Zip/Postal Code:</strong> <input v-model="order.zip"/></p>
-        <p>
-          <input type="checkbox" id="gift" value="true" v-model="order.gift">
-          <label for="gift">Ship As Gift?</label>
-        </p>
-        <p>
-          <input type="radio" id="home" value="Home" v-model="order.method">
-          <label for="home">Home</label>
-          <input type="radio" id="business" value="Business" v-model="order.method">
-          <label for="business">Business</label>
-        </p>
+      <div v-else class="checkout-container">
+        <!-- LEFT: CHECKOUT FORM -->
+        <div class="checkout">
+          <h1>Checkout</h1>
+          <p><strong>Name:</strong> <input type="text" v-model.trim="order.name"></p>
+          <p><strong>Surname:</strong> <input type="text" v-model.trim="order.surname"></p>
+          <p><strong>Address:</strong> <input v-model="order.address"></p>
+          <p><strong>City:</strong> <input v-model="order.city"/></p>
+          <p>
+            <strong>State:</strong>
+            <select v-model="order.state">
+              <option disabled value="">State</option>
+              <option>AL</option>
+              <option>AR</option>
+              <option>CA</option>
+              <option>NV</option>
+            </select>
+          </p>
+          <p><strong>Zip/Postal Code:</strong> <input v-model="order.zip"/></p>
+          <p>
+            <input type="checkbox" id="gift" value="true" v-model="order.gift">
+            <label for="gift">Ship As Gift?</label>
+          </p>
+          <p>
+            <input type="radio" id="home" value="Home" v-model="order.method">
+            <label for="home">Home</label>
+            <input type="radio" id="business" value="Business" v-model="order.method">
+            <label for="business">Business</label>
+          </p>
 
-        <!-- ORDER INFO -->
-        <h2>Order Information</h2>
-        <p>First Name: {{ order.name }}</p>
-        <p>Surname: {{ order.surname }}</p>
-        <p>Address: {{ order.address }}</p>
-        <p>City: {{ order.city }}</p>
-        <p>State: {{ order.state }}</p>
-        <p>Zip: {{ order.zip }}</p>
-        <p>Method: {{order.method}}</p>
-        <button v-on:click="submitForm">Place Order</button>
+          <h2>Order Summary</h2>
+          <p>First Name: {{ order.name }}</p>
+          <p>Surname: {{ order.surname }}</p>
+          <p>Address: {{ order.address }}</p>
+          <p>City: {{ order.city }}</p>
+          <p>State: {{ order.state }}</p>
+          <p>Zip: {{ order.zip }}</p>
+          <p>Method: {{order.method}}</p>
+
+          <button v-on:click="submitForm">Place Order</button>
+        </div>
+
+        <!-- RIGHT: CART SUMMARY -->
+        <div class="cart-summary">
+          <h2>Your Cart</h2>
+          <div v-for="item in groupedCart" :key="item.id" class="cart-item">
+            <img :src="item.image" :alt="item.title">
+            <div class="cart-item-details">
+              <strong>{{ item.title }}</strong><br>
+              Qty: {{ item.quantity }}<br>
+              Price: ₦{{ item.price * item.quantity }}
+            </div>
+          </div>
+          <div class="cart-total">
+            Total: ₦{{ cartTotal }}
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -254,36 +304,35 @@
     let webstore = new Vue({
       el: '#webstore',
       data: {
-        message: 'Hydro\'s Language School',
+        message: "Hydro's Language School",
         showProduct: true,
         products: [
           { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', availableInventory: 7, price: 2000 },
-          { id: 1002, title: 'French Language', description: 'Learn rich French dialects and communication styles.', price: 1800, location: 'PARIS', image: 'images/frenchflag.webp', availableInventory: 5 },
-          { id: 1003, title: 'Spanish Language', description: 'Learn rich Spanish dialects and communication styles.', price: 1800, location: 'MADRID', image: 'images/spanishflag.webp', availableInventory: 7 },
-          { id: 1004, title: 'Chinese Language', description: 'Learn rich Chinese dialects and communication styles.', price: 1800, location: 'HONG-KONG', image: 'images/chineseflag.webp', availableInventory: 10 },
-          { id: 1005, title: 'Hindi Language', description: 'Learn rich Hindi dialects and communication styles.', price: 1800, location: 'MUMBAI', image: 'images/hindiflag.webp', availableInventory: 12 },
-          { id: 1006, title: 'Arabic Language', description: 'Learn rich Arabic dialects and communication styles.', price: 1800, location: 'CAIRO', image: 'images/arabicflag.webp', availableInventory: 14 },
-          { id: 1007, title: 'Russian Language', description: 'Learn rich Russian dialects and communication styles.', price: 1800, location: 'MOSCOW', image: 'images/russianflag.webp', availableInventory: 5 },
-          { id: 1008, title: 'Nigerian Language/Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', price: 1800, location: 'LAGOS', image: 'images/nigerianflag.webp', availableInventory: 9 },
-          { id: 1009, title: 'Italian Language', description: 'Learn rich Italian dialects and communication styles.', price: 1800, location: 'MILAN', image: 'images/italianflag.webp', availableInventory: 11 },
-          { id: 1010, title: 'Korean Language', description: 'Learn rich Korean dialects and communication styles.', price: 1800, location: 'SEOUL', image: 'images/kpreanflag.jpeg', availableInventory: 9 },
-          { id: 1011, title: 'Portugese Language', description: 'Learn rich portugese dialects and communication styles.', price: 1800, Location: 'LISBON', image: 'images/portuflag.webp', availableInventory: 11}
+          { id: 1002, title: 'French Language', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', availableInventory: 5, price: 1800 },
+          { id: 1003, title: 'Spanish Language', description: 'Learn rich Spanish dialects and communication styles.', image: 'images/spanishflag.webp', location: 'MADRID', availableInventory: 7, price: 1800 },
+          { id: 1004, title: 'Chinese Language', description: 'Learn rich Chinese dialects and communication styles.', image: 'images/chineseflag.webp', location: 'HONG-KONG', availableInventory: 10, price: 1800 },
+          { id: 1005, title: 'Hindi Language', description: 'Learn rich Hindi dialects and communication styles.', image: 'images/hindiflag.webp', location: 'MUMBAI', availableInventory: 12, price: 1800 },
+          { id: 1006, title: 'Arabic Language', description: 'Learn rich Arabic dialects and communication styles.', image: 'images/arabicflag.webp', location: 'CAIRO', availableInventory: 14, price: 1800 },
+          { id: 1007, title: 'Russian Language', description: 'Learn rich Russian dialects and communication styles.', image: 'images/russianflag.webp', location: 'MOSCOW', availableInventory: 5, price: 1800 },
+          { id: 1008, title: 'Nigerian Language/Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', image: 'images/nigerianflag.webp', location: 'LAGOS', availableInventory: 9, price: 1800 },
+          { id: 1009, title: 'Italian Language', description: 'Learn rich Italian dialects and communication styles.', image: 'images/italianflag.webp', location: 'MILAN', availableInventory: 11, price: 1800 },
+          { id: 1010, title: 'Korean Language', description: 'Learn rich Korean dialects and communication styles.', image: 'images/kpreanflag.jpeg', location: 'SEOUL', availableInventory: 9, price: 1800 },
+          { id: 1011, title: 'Portuguese Language', description: 'Learn rich Portuguese dialects and communication styles.', image: 'images/portuflag.webp', location: 'LISBON', availableInventory: 11, price: 1800 }
         ],
         order: {
-          name: '',
-          surname: '',
-          address: '',
-          city: '',
-          state: '',
-          zip: '',
-          method: 'Home',
-          gift: false
+          name: '', surname: '', address: '', city: '', state: '', zip: '', method: 'Home', gift: false
         },
         cart: []
       },
       methods: {
         addItemtoCart(product) {
           this.cart.push(product.id);
+        },
+        removeItemFromCart(product) {
+          const index = this.cart.indexOf(product.id);
+          if (index !== -1) {
+            this.cart.splice(index, 1);
+          }
         },
         showCheckout() {
           this.showProduct = !this.showProduct;
@@ -301,6 +350,20 @@
             const count = this.cart.filter(id => id === product.id).length;
             return product.availableInventory > count;
           };
+        },
+        groupedCart() {
+          // Combines same items and counts quantity
+          let grouped = [];
+          this.products.forEach(product => {
+            const count = this.cart.filter(id => id === product.id).length;
+            if (count > 0) {
+              grouped.push({ ...product, quantity: count });
+            }
+          });
+          return grouped;
+        },
+        cartTotal() {
+          return this.groupedCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         }
       }
     });
