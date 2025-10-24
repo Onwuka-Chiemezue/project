@@ -8,11 +8,13 @@
   <title>Hydro's Language School</title>
 
   <style>
+    /* ===== DARK MODE THEME ===== */
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f6f8fb;
+      background: #0d1117;
+      color: #e6edf3;
     }
 
     /* HEADER */
@@ -21,13 +23,13 @@
       top: 0;
       left: 0;
       right: 0;
-      background: linear-gradient(90deg, #0078ff, #00c6ff);
-      color: white;
+      background: linear-gradient(90deg, #0078ff, #005fcc);
+      color: #fff;
       padding: 20px 50px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       z-index: 1000;
     }
 
@@ -39,26 +41,26 @@
     }
 
     header button {
-      background-color: #fff;
-      color: #0078ff;
+      background-color: #1f6feb;
+      color: #fff;
       border: none;
       padding: 10px 20px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       transition: 0.3s;
     }
 
     header button:hover {
-      background-color: #0078ff;
-      color: #fff;
+      background-color: #3182ff;
+      transform: scale(1.05);
     }
 
     /* MAIN BODY */
     main {
       text-align: center;
-      padding: 120px 40px 40px; 
+      padding: 120px 40px 40px;
     }
 
     .products-container {
@@ -69,18 +71,18 @@
     }
 
     .product-card {
-      background: white;
+      background: #161b22;
       border-radius: 15px;
       width: 240px;
       height: 380px;
       padding: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       transition: transform 0.3s, box-shadow 0.3s;
     }
 
     .product-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5);
     }
 
     .product-card img {
@@ -92,18 +94,18 @@
 
     .product-card h2 {
       font-size: 18px;
-      color: #333;
+      color: #58a6ff;
       margin-bottom: 8px;
     }
 
     .product-card p {
       font-size: 14px;
-      color: #555;
+      color: #c9d1d9;
       margin: 5px 0;
     }
 
     .product-card button {
-      background: #0078ff;
+      background: #238636;
       color: white;
       border: none;
       padding: 8px 16px;
@@ -114,7 +116,13 @@
     }
 
     .product-card button:hover {
-      background: #005fcc;
+      background: #2ea043;
+    }
+
+    .product-card button[disabled] {
+      background: #30363d;
+      color: #8b949e;
+      cursor: not-allowed;
     }
 
     /* CHECKOUT PAGE - SPLIT LAYOUT */
@@ -128,23 +136,30 @@
     .checkout, .cart-summary {
       flex: 1;
       min-width: 300px;
-      background: white;
+      background: #161b22;
       padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
 
     .checkout input, .checkout select {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
-      border: 1px solid #ccc;
+      border: 1px solid #30363d;
       border-radius: 8px;
+      background: #0d1117;
+      color: #c9d1d9;
+    }
+
+    .checkout input:focus, .checkout select:focus {
+      outline: none;
+      border-color: #58a6ff;
     }
 
     .checkout button {
       width: 100%;
-      background: #0078ff;
+      background: #1f6feb;
       color: white;
       padding: 12px;
       border: none;
@@ -155,19 +170,19 @@
     }
 
     .checkout button:hover {
-      background: #005fcc;
+      background: #3182ff;
     }
 
     /* CART SUMMARY */
     .cart-summary h2 {
       text-align: center;
-      color: #0078ff;
+      color: #58a6ff;
     }
 
     .cart-item {
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #30363d;
       padding: 10px 0;
     }
 
@@ -182,11 +197,16 @@
       text-align: left;
     }
 
+    .cart-item-details strong {
+      color: #e6edf3;
+    }
+
     .cart-total {
       font-weight: bold;
       text-align: right;
       margin-top: 10px;
       font-size: 18px;
+      color: #58a6ff;
     }
 
     @media (max-width: 700px) {
