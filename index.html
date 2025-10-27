@@ -184,6 +184,7 @@
       align-items: center;
       border-bottom: 1px solid #30363d;
       padding: 10px 0;
+      justify-content: space-between;
     }
 
     .cart-item img {
@@ -195,6 +196,7 @@
 
     .cart-item-details {
       text-align: left;
+      flex: 1;
     }
 
     .cart-item-details strong {
@@ -207,6 +209,43 @@
       margin-top: 10px;
       font-size: 18px;
       color: #58a6ff;
+    }
+
+    .remove-btn {
+      background: #da3633;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .remove-btn:hover {
+      background: #f85149;
+    }
+
+    /* NOTIFICATION (TOAST) */
+    .toast {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: #238636;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: slideInOut 2.5s forwards;
+      z-index: 2000;
+    }
+
+    @keyframes slideInOut {
+      0% { opacity: 0; transform: translateY(-20px); }
+      15% { opacity: 1; transform: translateY(0); }
+      85% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-20px); }
     }
 
     @media (max-width: 700px) {
@@ -230,6 +269,9 @@
       </button>
     </header>
 
+    <!-- TOAST NOTIFICATION -->
+    <div v-if="toastMessage" class="toast">{{ toastMessage }}</div>
+
     <main>
       <!-- PRODUCT GRID -->
       <div v-if="showProduct" class="products-container">
@@ -252,7 +294,7 @@
             <p>Inventory empty!</p>
           </div>
 
-          <button v-on:click="removeItemFromCart(product)">
+          <button v-on:click="removeItemFromCart(product)" style="background:#da3633;margin-top:8px;">
             Remove
           </button>
         </div>
@@ -289,15 +331,6 @@
             <label for="business">Business</label>
           </p>
 
-          <h2>Order Summary</h2>
-          <p>First Name: {{ order.name }}</p>
-          <p>Surname: {{ order.surname }}</p>
-          <p>Address: {{ order.address }}</p>
-          <p>City: {{ order.city }}</p>
-          <p>State: {{ order.state }}</p>
-          <p>Zip: {{ order.zip }}</p>
-          <p>Method: {{order.method}}</p>
-
           <button v-on:click="submitForm">Place Order</button>
         </div>
 
@@ -311,6 +344,7 @@
               Qty: {{ item.quantity }}<br>
               Price: ₦{{ item.price * item.quantity }}
             </div>
+            <button class="remove-btn" v-on:click="removeAllFromCart(item)">Remove</button>
           </div>
           <div class="cart-total">
             Total: ₦{{ cartTotal }}
@@ -326,6 +360,7 @@
       data: {
         message: "Hydro's Language School",
         showProduct: true,
+        toastMessage: '', // 🔔 new toast notification text
         products: [
           { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', availableInventory: 7, price: 2000 },
           { id: 1002, title: 'French Language', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', availableInventory: 5, price: 1800 },
@@ -347,18 +382,28 @@
       methods: {
         addItemtoCart(product) {
           this.cart.push(product.id);
+          this.showToast(`${product.title} added to cart ✅`);
         },
         removeItemFromCart(product) {
           const index = this.cart.indexOf(product.id);
           if (index !== -1) {
             this.cart.splice(index, 1);
+            this.showToast(`${product.title} removed ❌`);
           }
+        },
+        removeAllFromCart(item) {
+          this.cart = this.cart.filter(id => id !== item.id);
+          this.showToast(`${item.title} removed from cart ❌`);
         },
         showCheckout() {
           this.showProduct = !this.showProduct;
         },
         submitForm() {
           alert('Order placed successfully!');
+        },
+        showToast(message) {
+          this.toastMessage = message;
+          setTimeout(() => this.toastMessage = '', 2500);
         }
       },
       computed: {
@@ -372,13 +417,10 @@
           };
         },
         groupedCart() {
-          // Combines same items and counts quantity
           let grouped = [];
           this.products.forEach(product => {
             const count = this.cart.filter(id => id === product.id).length;
-            if (count > 0) {
-              grouped.push({ ...product, quantity: count });
-            }
+            if (count > 0) grouped.push({ ...product, quantity: count });
           });
           return grouped;
         },
