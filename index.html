@@ -8,7 +8,6 @@
   <title>Hydro's Language School</title>
 
   <style>
-    /* ===== DARK MODE THEME ===== */
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
@@ -17,7 +16,6 @@
       color: #e6edf3;
     }
 
-    /* HEADER */
     header {
       position: fixed;
       top: 0;
@@ -57,7 +55,6 @@
       transform: scale(1.05);
     }
 
-    /* MAIN BODY */
     main {
       text-align: center;
       padding: 120px 40px 40px;
@@ -125,7 +122,6 @@
       cursor: not-allowed;
     }
 
-    /* CHECKOUT PAGE - SPLIT LAYOUT */
     .checkout-container {
       display: flex;
       justify-content: space-between;
@@ -142,7 +138,7 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
 
-    .checkout input, .checkout select {
+    .checkout input {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
@@ -152,7 +148,7 @@
       color: #c9d1d9;
     }
 
-    .checkout input:focus, .checkout select:focus {
+    .checkout input:focus {
       outline: none;
       border-color: #58a6ff;
     }
@@ -173,7 +169,6 @@
       background: #3182ff;
     }
 
-    /* CART SUMMARY */
     .cart-summary h2 {
       text-align: center;
       color: #58a6ff;
@@ -199,10 +194,6 @@
       flex: 1;
     }
 
-    .cart-item-details strong {
-      color: #e6edf3;
-    }
-
     .cart-total {
       font-weight: bold;
       text-align: right;
@@ -225,13 +216,10 @@
       background: #f85149;
     }
 
-    /* NOTIFICATION (TOAST) */
     .toast {
       position: fixed;
       top: 80px;
       right: 20px;
-      background: #238636;
-      color: white;
       padding: 12px 20px;
       border-radius: 8px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
@@ -239,6 +227,17 @@
       transform: translateY(-20px);
       animation: slideInOut 2.5s forwards;
       z-index: 2000;
+      font-weight: 500;
+    }
+
+    .toast.success {
+      background: #238636;
+      color: #fff;
+    }
+
+    .toast.error {
+      background: #da3633;
+      color: #fff;
     }
 
     @keyframes slideInOut {
@@ -258,8 +257,6 @@
 
 <body>
   <div id="webstore">
-
-    <!-- HEADER -->
     <header>
       <h1>{{ message }}</h1>
       <button v-on:click="showCheckout">
@@ -269,11 +266,10 @@
       </button>
     </header>
 
-    <!-- TOAST NOTIFICATION -->
-    <div v-if="toastMessage" class="toast">{{ toastMessage }}</div>
+    <div v-if="toastMessage" :class="['toast', toastType]">{{ toastMessage }}</div>
 
     <main>
-      <!-- PRODUCT GRID -->
+      <!-- PRODUCT PAGE -->
       <div v-if="showProduct" class="products-container">
         <div v-for="product in products" :key="product.id" class="product-card">
           <figure>
@@ -288,12 +284,10 @@
           <button v-if="canAddToCart(product)" v-on:click="addItemtoCart(product)">
             Add to cart
           </button>
-
           <div v-else>
             <button disabled>Add to cart</button>
             <p>Inventory empty!</p>
           </div>
-
           <button v-on:click="removeItemFromCart(product)" style="background:#da3633;margin-top:8px;">
             Remove
           </button>
@@ -302,23 +296,14 @@
 
       <!-- CHECKOUT PAGE -->
       <div v-else class="checkout-container">
-        <!-- LEFT: CHECKOUT FORM -->
         <div class="checkout">
           <h1>Checkout</h1>
           <p><strong>Name:</strong> <input type="text" v-model.trim="order.name"></p>
           <p><strong>Surname:</strong> <input type="text" v-model.trim="order.surname"></p>
+          <p><strong>Phone Number:</strong> <input type="tel" v-model.trim="order.phone" placeholder="e.g. +2348000000000"></p>
           <p><strong>Address:</strong> <input v-model="order.address"></p>
           <p><strong>City:</strong> <input v-model="order.city"/></p>
-          <p>
-            <strong>State:</strong>
-            <select v-model="order.state">
-              <option disabled value="">State</option>
-              <option>AL</option>
-              <option>AR</option>
-              <option>CA</option>
-              <option>NV</option>
-            </select>
-          </p>
+          <p><strong>State:</strong> <input v-model="order.state" placeholder="Enter your state"/></p>
           <p><strong>Zip/Postal Code:</strong> <input v-model="order.zip"/></p>
           <p>
             <input type="checkbox" id="gift" value="true" v-model="order.gift">
@@ -330,11 +315,9 @@
             <input type="radio" id="business" value="Business" v-model="order.method">
             <label for="business">Business</label>
           </p>
-
           <button v-on:click="submitForm">Place Order</button>
         </div>
 
-        <!-- RIGHT: CART SUMMARY -->
         <div class="cart-summary">
           <h2>Your Cart</h2>
           <div v-for="item in groupedCart" :key="item.id" class="cart-item">
@@ -360,7 +343,8 @@
       data: {
         message: "Hydro's Language School",
         showProduct: true,
-        toastMessage: '', // 🔔 new toast notification text
+        toastMessage: '',
+        toastType: '',
         products: [
           { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', availableInventory: 7, price: 2000 },
           { id: 1002, title: 'French Language', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', availableInventory: 5, price: 1800 },
@@ -375,34 +359,56 @@
           { id: 1011, title: 'Portuguese Language', description: 'Learn rich Portuguese dialects and communication styles.', image: 'images/portuflag.webp', location: 'LISBON', availableInventory: 11, price: 1800 }
         ],
         order: {
-          name: '', surname: '', address: '', city: '', state: '', zip: '', method: 'Home', gift: false
+          name: '', surname: '', phone: '', address: '', city: '', state: '', zip: '', method: 'Home', gift: false
         },
         cart: []
       },
       methods: {
         addItemtoCart(product) {
           this.cart.push(product.id);
-          this.showToast(`${product.title} added to cart ✅`);
+          this.showToast(`${product.title} added to cart ✅`, 'success');
         },
         removeItemFromCart(product) {
           const index = this.cart.indexOf(product.id);
           if (index !== -1) {
             this.cart.splice(index, 1);
-            this.showToast(`${product.title} removed ❌`);
+            this.showToast(`${product.title} removed ❌`, 'error');
           }
         },
         removeAllFromCart(item) {
           this.cart = this.cart.filter(id => id !== item.id);
-          this.showToast(`${item.title} removed from cart ❌`);
+          this.showToast(`${item.title} removed from cart ❌`, 'error');
         },
         showCheckout() {
           this.showProduct = !this.showProduct;
         },
         submitForm() {
-          alert('Order placed successfully!');
+          if (this.cart.length === 0) {
+            this.showToast('🛒 Your cart is empty!', 'error');
+            return;
+          }
+
+          if (this.validateForm()) {
+            this.showToast('✅ Order placed successfully!', 'success');
+            alert('Order placed successfully!');
+          } else {
+            this.showToast('⚠️ Please fill in all fields before submitting.', 'error');
+          }
         },
-        showToast(message) {
+        validateForm() {
+          return (
+            this.order.name &&
+            this.order.surname &&
+            this.order.phone &&
+            this.order.address &&
+            this.order.city &&
+            this.order.state &&
+            this.order.zip
+          );
+        },
+        showToast(message, type) {
           this.toastMessage = message;
+          this.toastType = type;
           setTimeout(() => this.toastMessage = '', 2500);
         }
       },
