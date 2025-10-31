@@ -34,7 +34,6 @@
     header h1 {
       font-size: 28px;
       margin: 0;
-      text-align: center;
       letter-spacing: 1px;
     }
 
@@ -58,6 +57,22 @@
     main {
       text-align: center;
       padding: 120px 40px 40px;
+    }
+
+    .continent-filter {
+      background: #161b22;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      margin-left: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .continent-filter:hover {
+      border-color: #58a6ff;
     }
 
     .products-container {
@@ -252,6 +267,52 @@
         flex-direction: column;
       }
     }
+
+    footer {
+      background: #0b0f14;
+      color: #c9d1d9;
+      padding: 40px 20px 20px;
+      margin-top: 80px;
+      border-top: 2px solid #1f6feb;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      text-align: left;
+      gap: 30px;
+    }
+
+    .footer-section {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .footer-section h2 {
+      color: #58a6ff;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .footer-section p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-section i {
+      margin-right: 8px;
+      color: #58a6ff;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      border-top: 1px solid #30363d;
+      margin-top: 30px;
+      padding-top: 10px;
+      font-size: 13px;
+      color: #8b949e;
+    }
   </style>
 </head>
 
@@ -259,11 +320,19 @@
   <div id="webstore">
     <header>
       <h1>{{ message }}</h1>
-      <button v-on:click="showCheckout">
-        {{ itemInCart }}
-        <span class="fa-solid fa-cart-shopping"></span>
-        Checkout
-      </button>
+      <div>
+        <select v-model="selectedContinent" class="continent-filter">
+          <option value="">All Continents</option>
+          <option v-for="(count, continent) in continentCounts" :key="continent" :value="continent">
+            {{ continent }} ({{ count }})
+          </option>
+        </select>
+        <button v-on:click="showCheckout">
+          {{ itemInCart }}
+          <span class="fa-solid fa-cart-shopping"></span>
+          Checkout
+        </button>
+      </div>
     </header>
 
     <div v-if="toastMessage" :class="['toast', toastType]">{{ toastMessage }}</div>
@@ -271,7 +340,7 @@
     <main>
       <!-- PRODUCT PAGE -->
       <div v-if="showProduct" class="products-container">
-        <div v-for="product in products" :key="product.id" class="product-card">
+        <div v-for="product in filteredProducts" :key="product.id" class="product-card">
           <figure>
             <img v-bind:src="product.image" :alt="product.title">
           </figure>
@@ -280,7 +349,6 @@
           <p><strong>Location:</strong> {{ product.location }}</p>
           <p><strong>Price:</strong> ₦{{ product.price }}</p>
           <p><strong>Availability:</strong> {{ product.availableInventory }}</p>
-
           <button v-if="canAddToCart(product)" v-on:click="addItemtoCart(product)">
             Add to cart
           </button>
@@ -345,23 +413,59 @@
         showProduct: true,
         toastMessage: '',
         toastType: '',
+        selectedContinent: '',
         products: [
-          { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', availableInventory: 7, price: 2000 },
-          { id: 1002, title: 'French Language', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', availableInventory: 5, price: 1800 },
-          { id: 1003, title: 'Spanish Language', description: 'Learn rich Spanish dialects and communication styles.', image: 'images/spanishflag.webp', location: 'MADRID', availableInventory: 7, price: 1800 },
-          { id: 1004, title: 'Chinese Language', description: 'Learn rich Chinese dialects and communication styles.', image: 'images/chineseflag.webp', location: 'HONG-KONG', availableInventory: 10, price: 1800 },
-          { id: 1005, title: 'Hindi Language', description: 'Learn rich Hindi dialects and communication styles.', image: 'images/hindiflag.webp', location: 'MUMBAI', availableInventory: 12, price: 1800 },
-          { id: 1006, title: 'Arabic Language', description: 'Learn rich Arabic dialects and communication styles.', image: 'images/arabicflag.webp', location: 'CAIRO', availableInventory: 14, price: 1800 },
-          { id: 1007, title: 'Russian Language', description: 'Learn rich Russian dialects and communication styles.', image: 'images/russianflag.webp', location: 'MOSCOW', availableInventory: 5, price: 1800 },
-          { id: 1008, title: 'Nigerian Language/Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', image: 'images/nigerianflag.webp', location: 'LAGOS', availableInventory: 9, price: 1800 },
-          { id: 1009, title: 'Italian Language', description: 'Learn rich Italian dialects and communication styles.', image: 'images/italianflag.webp', location: 'MILAN', availableInventory: 11, price: 1800 },
-          { id: 1010, title: 'Korean Language', description: 'Learn rich Korean dialects and communication styles.', image: 'images/kpreanflag.jpeg', location: 'SEOUL', availableInventory: 9, price: 1800 },
-          { id: 1011, title: 'Portuguese Language', description: 'Learn rich Portuguese dialects and communication styles.', image: 'images/portuflag.webp', location: 'LISBON', availableInventory: 11, price: 1800 }
+          { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', continent: 'Europe', availableInventory: 7, price: 2000 },
+          { id: 1002, title: 'French', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', continent: 'Europe', availableInventory: 5, price: 1800 },
+          { id: 1003, title: 'Spanish', description: 'Learn rich Spanish dialects and communication styles.', image: 'images/spanishflag.webp', location: 'MADRID', continent: 'Europe', availableInventory: 7, price: 1800 },
+          { id: 1004, title: 'Chinese', description: 'Learn rich Chinese dialects and communication styles.', image: 'images/chineseflag.webp', location: 'HONG-KONG', continent: 'Asia', availableInventory: 10, price: 1800 },
+          { id: 1005, title: 'Hindi', description: 'Learn rich Hindi dialects and communication styles.', image: 'images/hindiflag.webp', location: 'MUMBAI', continent: 'Asia', availableInventory: 12, price: 1800 },
+          { id: 1006, title: 'Arabic', description: 'Learn rich Arabic dialects and communication styles.', image: 'images/arabicflag.webp', location: 'CAIRO', continent: 'Africa', availableInventory: 14, price: 1800 },
+          { id: 1007, title: 'Russian', description: 'Learn rich Russian dialects and communication styles.', image: 'images/russianflag.webp', location: 'MOSCOW', continent: 'Europe', availableInventory: 5, price: 1800 },
+          { id: 1008, title: 'Nigerian Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', image: 'images/nigerianflag.webp', location: 'LAGOS', continent: 'Africa', availableInventory: 9, price: 1800 },
+          { id: 1009, title: 'Italian', description: 'Learn rich Italian dialects and communication styles.', image: 'images/italianflag.webp', location: 'MILAN', continent: 'Europe', availableInventory: 11, price: 1800 },
+          { id: 1010, title: 'Korean', description: 'Learn rich Korean dialects and communication styles.', image: 'images/kpreanflag.jpeg', location: 'SEOUL', continent: 'Asia', availableInventory: 9, price: 1800 },
+          { id: 1011, title: 'Portuguese', description: 'Learn rich Portuguese dialects and communication styles.', image: 'images/portuflag.webp', location: 'LISBON', continent: 'Europe', availableInventory: 11, price: 1800 },
+          { id: 1011, title: 'Mexican Spanish', description: 'Learn rich Mexican dialects and communication styles.', image: 'images/mexicoflag.webp', location: 'Mexico', continent: 'North America', availableInventory: 10, price: 1800 },
+          { id: 1011, title: 'Mauritian Creole', description: 'Learn rich Mauritian dialects and communication styles.', image: 'images/mauritiusflag.webp', location: 'Flic-en-Flac', continent: 'Africa', availableInventory: 10, price: 1800 }
         ],
         order: {
           name: '', surname: '', phone: '', address: '', city: '', state: '', zip: '', method: 'Home', gift: false
         },
         cart: []
+      },
+      computed: {
+        itemInCart() {
+          return this.cart.length || '';
+        },
+        canAddToCart() {
+          return (product) => {
+            const count = this.cart.filter(id => id === product.id).length;
+            return product.availableInventory > count;
+          };
+        },
+        groupedCart() {
+          let grouped = [];
+          this.products.forEach(product => {
+            const count = this.cart.filter(id => id === product.id).length;
+            if (count > 0) grouped.push({ ...product, quantity: count });
+          });
+          return grouped;
+        },
+        cartTotal() {
+          return this.groupedCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        },
+        continentCounts() {
+          const counts = {};
+          this.products.forEach(p => {
+            counts[p.continent] = (counts[p.continent] || 0) + 1;
+          });
+          return counts;
+        },
+        filteredProducts() {
+          if (!this.selectedContinent) return this.products;
+          return this.products.filter(p => p.continent === this.selectedContinent);
+        }
       },
       methods: {
         addItemtoCart(product) {
@@ -411,30 +515,33 @@
           this.toastType = type;
           setTimeout(() => this.toastMessage = '', 2500);
         }
-      },
-      computed: {
-        itemInCart() {
-          return this.cart.length || '';
-        },
-        canAddToCart() {
-          return (product) => {
-            const count = this.cart.filter(id => id === product.id).length;
-            return product.availableInventory > count;
-          };
-        },
-        groupedCart() {
-          let grouped = [];
-          this.products.forEach(product => {
-            const count = this.cart.filter(id => id === product.id).length;
-            if (count > 0) grouped.push({ ...product, quantity: count });
-          });
-          return grouped;
-        },
-        cartTotal() {
-          return this.groupedCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        }
       }
     });
   </script>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h2>Our Mission</h2>
+        <p>To empower students worldwide with the confidence and skills to communicate fluently in multiple languages through engaging and high-quality instruction.</p>
+      </div>
+
+      <div class="footer-section">
+        <h2>Our Vision</h2>
+        <p>To be the leading language school that bridges cultures and connects communities through the power of language learning.</p>
+      </div>
+
+      <div class="footer-section">
+        <h2>Contact Us</h2>
+        <p><i class="fa-solid fa-phone"></i> 08187141549</p>
+        <p><i class="fa-solid fa-envelope"></i> onwukakamsiisaac@gmail.com</p>
+        <p><i class="fa-solid fa-location-dot"></i> Gelato Heaven Avenue, Radar</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 Hydro's Language School — All Rights Reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>
