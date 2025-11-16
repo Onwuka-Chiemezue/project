@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -5,6 +6,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"/>
   <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
   <title>Hydro's Language School</title>
+
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -14,101 +16,87 @@
       color: #e6edf3;
     }
 
+    /* HEADER */
     header {
-     position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 60px;
-  background: linear-gradient(90deg, #005fcc, #0078ff);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  z-index: 1000;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  transition: all 0.4s ease;
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 60px;
+      background: linear-gradient(90deg, #005fcc, #0078ff);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.4s ease;
+    }
 
-header:hover {
-  box-shadow: 0 0 25px rgba(0,180,255,0.4);
-}
+    header:hover {
+      box-shadow: 0 0 25px rgba(0,180,255,0.4);
+    }
 
-header h1 {
-  font-size: 26px;
-  font-weight: 600;
-  margin: 0;
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(0, 180, 255, 0.6);
-}
+    header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(0, 180, 255, 0.6);
+    }
 
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-.filter-select {
-  background: #0d1117;
-  color: #e6edf3;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 150px;
-}
+    .filter-select {
+      background: #0d1117;
+      color: #e6edf3;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 170px;
+    }
 
-.filter-select:hover {
-  border-color: #58a6ff;
-  box-shadow: 0 0 8px rgba(0,180,255,0.3);
-}
+    .filter-select:hover {
+      border-color: #58a6ff;
+      box-shadow: 0 0 8px rgba(0,180,255,0.3);
+    }
 
-.cart-btn {
-  background: linear-gradient(90deg, #238636, #2ea043);
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+    .cart-btn {
+      background: linear-gradient(90deg, #238636, #2ea043);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.cart-btn:hover {
-  background: linear-gradient(90deg, #2ea043, #3fb950);
-  transform: translateY(-2px);
-  box-shadow: 0 0 12px rgba(46,160,67,0.6);
-}
+    .cart-btn:hover {
+      background: linear-gradient(90deg, #2ea043, #3fb950);
+      transform: translateY(-2px);
+      box-shadow: 0 0 12px rgba(46,160,67,0.6);
+    }
 
     main {
       text-align: center;
       padding: 120px 40px 40px;
     }
 
-    .continent-filter {
-      background: #161b22;
-      color: #c9d1d9;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 14px;
-      margin-left: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .continent-filter:hover {
-      border-color: #58a6ff;
-    }
-
+    /* PRODUCT LIST */
     .products-container {
       display: flex;
       flex-wrap: wrap;
@@ -171,6 +159,7 @@ header h1 {
       cursor: not-allowed;
     }
 
+    /* CHECKOUT */
     .checkout-container {
       display: flex;
       justify-content: space-between;
@@ -218,6 +207,7 @@ header h1 {
       background: #3182ff;
     }
 
+    /* CART */
     .cart-summary h2 {
       text-align: center;
       color: #58a6ff;
@@ -265,6 +255,7 @@ header h1 {
       background: #f85149;
     }
 
+    /* TOAST */
     .toast {
       position: fixed;
       top: 80px;
@@ -279,15 +270,8 @@ header h1 {
       font-weight: 500;
     }
 
-    .toast.success {
-      background: #238636;
-      color: #fff;
-    }
-
-    .toast.error {
-      background: #da3633;
-      color: #fff;
-    }
+    .toast.success { background: #238636; color: #fff; }
+    .toast.error { background: #da3633; color: #fff; }
 
     @keyframes slideInOut {
       0% { opacity: 0; transform: translateY(-20px); }
@@ -297,11 +281,10 @@ header h1 {
     }
 
     @media (max-width: 700px) {
-      .checkout-container {
-        flex-direction: column;
-      }
+      .checkout-container { flex-direction: column; }
     }
 
+    /* FOOTER */
     footer {
       background: #0b0f14;
       color: #c9d1d9;
@@ -352,56 +335,56 @@ header h1 {
 
 <body>
   <div id="webstore">
+    <!-- HEADER -->
     <header>
-  <div class="header-left">
-    <h1>{{ message }}</h1>
-  </div>
+      <div class="header-left">
+        <h1>{{ message }}</h1>
+      </div>
 
-  <div class="header-controls">
-    <select v-model="selectedContinent" class="filter-select">
-      <option value="">All Continents</option>
-      <option v-for="(count, continent) in continentCounts" :key="continent" :value="continent">
-        {{ continent }} ({{ count }})
-      </option>
-    </select>
+      <div class="header-controls">
+        <select v-model="selectedContinent" class="filter-select">
+          <option value="">All Continents</option>
+          <option v-for="(count, continent) in continentCounts" :key="continent" :value="continent">
+            {{ continent }} ({{ count }})
+          </option>
+        </select>
 
-    <select v-model="sortOrder" class="filter-select">
-      <option value="">Sort by Price</option>
-      <option value="asc">Price: Low → High</option>
-      <option value="desc">Price: High → Low</option>
-    </select>
+        <!-- ✅ Updated sort dropdown -->
+        <select v-model="sortOrder" class="filter-select">
+          <option value="">Sort by</option>
+          <option value="asc">Price: Low → High</option>
+          <option value="desc">Price: High → Low</option>
+          <option value="availAsc">Availability: Low → High</option>
+          <option value="availDesc">Availability: High → Low</option>
+        </select>
 
-    <button v-on:click="showCheckout" class="cart-btn">
-      <span class="fa-solid fa-cart-shopping"></span>
-      Cart ({{ itemInCart || 0 }})
-    </button>
-  </div>
-</header>
+        <button v-on:click="showCheckout" class="cart-btn">
+          <span class="fa-solid fa-cart-shopping"></span>
+          Cart ({{ itemInCart || 0 }})
+        </button>
+      </div>
+    </header>
 
     <div v-if="toastMessage" :class="['toast', toastType]">{{ toastMessage }}</div>
 
     <main>
-      <!-- PRODUCT PAGE -->
+      <!-- PRODUCTS PAGE -->
       <div v-if="showProduct" class="products-container">
         <div v-for="product in sortedProducts" :key="product.id" class="product-card">
           <figure>
-            <img v-bind:src="product.image" :alt="product.title">
+            <img :src="product.image" :alt="product.title">
           </figure>
           <h2>{{ product.title }}</h2>
           <p>{{ product.description }}</p>
           <p><strong>Location:</strong> {{ product.location }}</p>
           <p><strong>Price:</strong> ₦{{ product.price }}</p>
           <p><strong>Availability:</strong> {{ product.availableInventory }}</p>
-          <button v-if="canAddToCart(product)" v-on:click="addItemtoCart(product)">
-            Add to cart
-          </button>
+          <button v-if="canAddToCart(product)" @click="addItemtoCart(product)">Add to cart</button>
           <div v-else>
             <button disabled>Add to cart</button>
             <p>Inventory empty!</p>
           </div>
-          <button v-on:click="removeItemFromCart(product)" style="background:#da3633;margin-top:8px;">
-            Remove
-          </button>
+          <button @click="removeItemFromCart(product)" style="background:#da3633;margin-top:8px;">Remove</button>
         </div>
       </div>
 
@@ -409,26 +392,47 @@ header h1 {
       <div v-else class="checkout-container">
         <div class="checkout">
           <h1>Checkout</h1>
-          <p><strong>Name:</strong> <input type="text" v-model.trim="order.name"></p>
-          <p><strong>Surname:</strong> <input type="text" v-model.trim="order.surname"></p>
-          <p><strong>Phone Number:</strong> <input type="tel" v-model.trim="order.phone" placeholder="e.g. +2348000000000"></p>
+
+          <p><strong>Name:</strong>
+            <input type="text" v-model.trim="order.name" placeholder="Enter your first name"
+                   @input="order.name = order.name.replace(/[^a-zA-Z\s]/g, '')">
+          </p>
+
+          <p><strong>Surname:</strong>
+            <input type="text" v-model.trim="order.surname" placeholder="Enter your surname"
+                   @input="order.surname = order.surname.replace(/[^a-zA-Z\s]/g, '')">
+          </p>
+
           <p><strong>Address:</strong> <input v-model="order.address"></p>
-          <p><strong>City:</strong> <input v-model="order.city"/></p>
-          <p><strong>State:</strong> <input v-model="order.state" placeholder="Enter your state"/></p>
-          <p><strong>Zip/Postal Code:</strong> <input v-model="order.zip"/></p>
+          <p><strong>City:</strong> <input v-model="order.city"></p>
+          <p><strong>State:</strong> <input v-model="order.state" placeholder="Enter your state"></p>
+
+          <p><strong>ZIP Code:</strong>
+            <input type="text" v-model.trim="order.zip" placeholder="e.g. 90210" maxlength="10"
+                   @input="order.zip = order.zip.replace(/[^0-9\-]/g, '')">
+          </p>
+
+          <p><strong>Phone Number:</strong>
+            <input type="tel" v-model.trim="order.phone" placeholder="e.g. +2348000000000"
+                   @input="order.phone = order.phone.replace(/[^0-9+\-\s]/g, '')">
+          </p>
+
           <p>
             <input type="checkbox" id="gift" value="true" v-model="order.gift">
             <label for="gift">Ship As Gift?</label>
           </p>
+
           <p>
             <input type="radio" id="home" value="Home" v-model="order.method">
             <label for="home">Home</label>
             <input type="radio" id="business" value="Business" v-model="order.method">
             <label for="business">Business</label>
           </p>
-          <button v-on:click="submitForm">Place Order</button>
+
+          <button @click="submitForm">Place Order</button>
         </div>
 
+        <!-- CART SUMMARY -->
         <div class="cart-summary">
           <h2>Your Cart</h2>
           <div v-for="item in groupedCart" :key="item.id" class="cart-item">
@@ -438,7 +442,7 @@ header h1 {
               Qty: {{ item.quantity }}<br>
               Price: ₦{{ item.price * item.quantity }}
             </div>
-            <button class="remove-btn" v-on:click="removeAllFromCart(item)">Remove</button>
+            <button class="remove-btn" @click="removeAllFromCart(item)">Remove</button>
           </div>
           <div class="cart-total">
             Total: ₦{{ cartTotal }}
@@ -449,158 +453,119 @@ header h1 {
   </div>
 
   <script>
-let webstore = new Vue({
-  el: '#webstore',
-  data: {
-    message: "Hydro's Language School",
-    showProduct: true,
-    toastMessage: '',
-    toastType: '',
-    selectedContinent: '',
-    sortOrder: '',
-    products: [
-      { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', continent: 'Europe', availableInventory: 7, price: 2000 },
-      { id: 1002, title: 'French', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', continent: 'Europe', availableInventory: 5, price: 1800 },
-      { id: 1003, title: 'Spanish', description: 'Learn rich Spanish dialects and communication styles.', image: 'images/spanishflag.webp', location: 'MADRID', continent: 'Europe', availableInventory: 7, price: 1800 },
-      { id: 1004, title: 'Chinese', description: 'Learn rich Chinese dialects and communication styles.', image: 'images/chineseflag.webp', location: 'HONG-KONG', continent: 'Asia', availableInventory: 10, price: 1800 },
-      { id: 1005, title: 'Hindi', description: 'Learn rich Hindi dialects and communication styles.', image: 'images/hindiflag.webp', location: 'MUMBAI', continent: 'Asia', availableInventory: 12, price: 1800 },
-      { id: 1006, title: 'Arabic', description: 'Learn rich Arabic dialects and communication styles.', image: 'images/arabicflag.webp', location: 'CAIRO', continent: 'Africa', availableInventory: 14, price: 1800 },
-      { id: 1007, title: 'Russian', description: 'Learn rich Russian dialects and communication styles.', image: 'images/russianflag.webp', location: 'MOSCOW', continent: 'Europe', availableInventory: 5, price: 1800 },
-      { id: 1008, title: 'Nigerian Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', image: 'images/nigerianflag.webp', location: 'LAGOS', continent: 'Africa', availableInventory: 9, price: 1800 },
-      { id: 1009, title: 'Italian', description: 'Learn rich Italian dialects and communication styles.', image: 'images/italianflag.webp', location: 'MILAN', continent: 'Europe', availableInventory: 11, price: 1800 },
-      { id: 1010, title: 'Korean', description: 'Learn rich Korean dialects and communication styles.', image: 'images/kpreanflag.jpeg', location: 'SEOUL', continent: 'Asia', availableInventory: 9, price: 1800 },
-      { id: 1011, title: 'Portuguese', description: 'Learn rich Portuguese dialects and communication styles.', image: 'images/portuflag.webp', location: 'LISBON', continent: 'Europe', availableInventory: 11, price: 1800 },
-      { id: 1012, title: 'Mexican Spanish', description: 'Learn rich Mexican dialects and communication styles.', image: 'images/mexicoflag.webp', location: 'Mexico', continent: 'North America', availableInventory: 10, price: 2200 },
-      { id: 1013, title: 'Mauritian Creole', description: 'Learn rich Mauritian dialects and communication styles.', image: 'images/mauritiusflag.webp', location: 'Flic-en-Flac', continent: 'Africa', availableInventory: 10, price: 1500 }
-    ],
-    order: {
-      name: '', surname: '', phone: '', address: '', city: '', state: '', zip: '', method: 'Home', gift: false
+  new Vue({
+    el: '#webstore',
+    data: {
+      message: "Hydro's Language School",
+      showProduct: true,
+      toastMessage: '',
+      toastType: '',
+      selectedContinent: '',
+      sortOrder: '',
+      products: [
+        { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', continent: 'Europe', availableInventory: 7, price: 2000 },
+        { id: 1002, title: 'French', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', continent: 'Europe', availableInventory: 5, price: 1800 },
+        { id: 1003, title: 'Spanish', description: 'Learn rich Spanish dialects and communication styles.', image: 'images/spanishflag.webp', location: 'MADRID', continent: 'Europe', availableInventory: 7, price: 1800 },
+        { id: 1004, title: 'Chinese', description: 'Learn rich Chinese dialects and communication styles.', image: 'images/chineseflag.webp', location: 'HONG-KONG', continent: 'Asia', availableInventory: 10, price: 1800 },
+        { id: 1005, title: 'Hindi', description: 'Learn rich Hindi dialects and communication styles.', image: 'images/hindiflag.webp', location: 'MUMBAI', continent: 'Asia', availableInventory: 12, price: 1800 },
+        { id: 1006, title: 'Arabic', description: 'Learn rich Arabic dialects and communication styles.', image: 'images/arabicflag.webp', location: 'CAIRO', continent: 'Africa', availableInventory: 14, price: 1800 },
+        { id: 1007, title: 'Russian', description: 'Learn rich Russian dialects and communication styles.', image: 'images/russianflag.webp', location: 'MOSCOW', continent: 'Europe', availableInventory: 5, price: 1800 },
+        { id: 1008, title: 'Nigerian Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', image: 'images/nigerianflag.webp', location: 'LAGOS', continent: 'Africa', availableInventory: 9, price: 1800 },
+        { id: 1009, title: 'Italian', description: 'Learn rich Italian dialects and communication styles.', image: 'images/italianflag.webp', location: 'MILAN', continent: 'Europe', availableInventory: 11, price: 1800 },
+        { id: 1010, title: 'Korean', description: 'Learn rich Korean dialects and communication styles.', image: 'images/kpreanflag.jpeg', location: 'SEOUL', continent: 'Asia', availableInventory: 9, price: 1800 },
+        { id: 1011, title: 'Portuguese', description: 'Learn rich Portuguese dialects and communication styles.', image: 'images/portuflag.webp', location: 'LISBON', continent: 'Europe', availableInventory: 6, price: 1800 }
+      ],
+      cart: [],
+      order: { name: '', surname: '', address: '', city: '', state: '', zip: '', phone: '', gift: false, method: '' }
     },
-    cart: []
-  },
-  computed: {
-    itemInCart() {
-      return this.cart.length || '';
+
+    computed: {
+      filteredProducts() {
+        if (!this.selectedContinent) return this.products;
+        return this.products.filter(p => p.continent === this.selectedContinent);
+      },
+      sortedProducts() {
+        let sorted = [...this.filteredProducts];
+        if (this.sortOrder === 'asc') {
+          sorted.sort((a, b) => a.price - b.price);
+        } else if (this.sortOrder === 'desc') {
+          sorted.sort((a, b) => b.price - a.price);
+        } else if (this.sortOrder === 'availAsc') {
+          sorted.sort((a, b) => a.availableInventory - b.availableInventory);
+        } else if (this.sortOrder === 'availDesc') {
+          sorted.sort((a, b) => b.availableInventory - a.availableInventory);
+        }
+        return sorted;
+      },
+      continentCounts() {
+        return this.products.reduce((counts, p) => {
+          counts[p.continent] = (counts[p.continent] || 0) + 1;
+          return counts;
+        }, {});
+      },
+      itemInCart() {
+        return this.cart.length;
+      },
+      groupedCart() {
+        let grouped = {};
+        this.cart.forEach(item => {
+          if (!grouped[item.id]) grouped[item.id] = { ...item, quantity: 0 };
+          grouped[item.id].quantity++;
+        });
+        return Object.values(grouped);
+      },
+      cartTotal() {
+        return this.cart.reduce((sum, item) => sum + item.price, 0);
+      }
     },
-    canAddToCart() {
-      return (product) => {
-        const count = this.cart.filter(id => id === product.id).length;
+
+    methods: {
+      showCheckout() {
+        if (this.cart.length === 0) {
+          this.showToast('Cart is empty! Add items first.', 'error');
+        } else {
+          this.showProduct = !this.showProduct;
+        }
+      },
+      addItemtoCart(product) {
+        if (this.canAddToCart(product)) {
+          this.cart.push(product);
+          this.showToast('Added to cart!', 'success');
+        } else {
+          this.showToast('No more stock left!', 'error');
+        }
+      },
+      removeItemFromCart(product) {
+        const index = this.cart.findIndex(p => p.id === product.id);
+        if (index > -1) {
+          this.cart.splice(index, 1);
+          this.showToast('Removed from cart.', 'success');
+        }
+      },
+      removeAllFromCart(product) {
+        this.cart = this.cart.filter(p => p.id !== product.id);
+        this.showToast('Item removed.', 'success');
+      },
+      canAddToCart(product) {
+        const count = this.cart.filter(p => p.id === product.id).length;
         return product.availableInventory > count;
-      };
-    },
-    groupedCart() {
-      let grouped = [];
-      this.products.forEach(product => {
-        const count = this.cart.filter(id => id === product.id).length;
-        if (count > 0) grouped.push({ ...product, quantity: count });
-      });
-      return grouped;
-    },
-    cartTotal() {
-      return this.groupedCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    },
-    continentCounts() {
-      const counts = {};
-      this.products.forEach(p => {
-        counts[p.continent] = (counts[p.continent] || 0) + 1;
-      });
-      return counts;
-    },
-    filteredProducts() {
-      if (!this.selectedContinent) return this.products;
-      return this.products.filter(p => p.continent === this.selectedContinent);
-    },
-    sortedProducts() {
-      let sorted = [...this.filteredProducts];
-      if (this.sortOrder === 'asc') sorted.sort((a, b) => a.price - b.price);
-      else if (this.sortOrder === 'desc') sorted.sort((a, b) => b.price - a.price);
-      return sorted;
-    }
-  },
-  methods: {
-    addItemtoCart(product) {
-      this.cart.push(product.id);
-      this.showToast(`${product.title} added to cart ✅`, 'success');
-    },
-    removeItemFromCart(product) {
-      const index = this.cart.indexOf(product.id);
-      if (index !== -1) {
-        this.cart.splice(index, 1);
-        this.showToast(`${product.title} removed ❌`, 'error');
-      }
-    },
-    removeAllFromCart(item) {
-      this.cart = this.cart.filter(id => id !== item.id);
-      this.showToast(`${item.title} removed from cart ❌`, 'error');
-    },
-
-   showCheckout() {
-  // If currently viewing products and the cart is empty → block
-  if (this.showProduct && this.cart.length === 0) {
-    alert('🛒 Your cart is empty! Please add at least one item before viewing checkout.');
-    return;
-  }
-  // Otherwise toggle between product and checkout page
-  this.showProduct = !this.showProduct;
-},
-
-
-    submitForm() {
-      if (this.cart.length === 0) {
-        this.showToast('🛒 Your cart is empty!', 'error');
-        return;
-      }
-
-      if (this.validateForm()) {
-        this.showToast('✅ Order placed successfully!', 'success');
+      },
+      showToast(msg, type) {
+        this.toastMessage = msg;
+        this.toastType = type;
+        setTimeout(() => this.toastMessage = '', 2500);
+      },
+      submitForm() {
+        if (!this.order.name || !this.order.surname || !this.order.address || !this.order.city || !this.order.state || !this.order.phone) {
+          this.showToast('Please fill in all fields.', 'error');
+          return;
+        }
         alert('Order placed successfully!');
-      } else {
-        this.showToast('⚠️ Please fill in all fields before submitting.', 'error');
+        this.cart = [];
+        this.showProduct = true;
       }
-    },
-    validateForm() {
-      return (
-        this.order.name &&
-        this.order.surname &&
-        this.order.phone &&
-        this.order.address &&
-        this.order.city &&
-        this.order.state &&
-        this.order.zip
-      );
-    },
-    showToast(message, type) {
-      this.toastMessage = message;
-      this.toastType = type;
-      setTimeout(() => (this.toastMessage = ''), 2500);
     }
-  }
-});
-</script>
-
-  <footer>
-    <div class="footer-content">
-      <div class="footer-section">
-        <h2>Our Mission</h2>
-        <p>To empower students worldwide with the confidence and skills to communicate fluently in multiple languages through engaging and high-quality instruction.</p>
-      </div>
-
-      <div class="footer-section">
-        <h2>Our Vision</h2>
-        <p>To be the leading language school that bridges cultures and connects communities through the power of language learning.</p>
-      </div>
-
-      <div class="footer-section">
-        <h2>Contact Us</h2>
-        <p><i class="fa-solid fa-phone"></i> 08187141549</p>
-        <p><i class="fa-solid fa-envelope"></i> onwukakamsiisaac@gmail.com</p>
-        <p><i class="fa-solid fa-location-dot"></i> Gelato Heaven Avenue, Radar</p>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2025 Hydro's Language School — All Rights Reserved.</p>
-    </div>
-  </footer>
+  });
+  </script>
 </body>
 </html>
