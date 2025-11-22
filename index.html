@@ -342,6 +342,14 @@
       </div>
 
       <div class="header-controls">
+        <input 
+        type="text" 
+        v-model="searchQuery" 
+        @input="searchLessons" 
+        placeholder="Search lessons..." 
+        class="filter-select" 
+        style="min-width:220px;"
+  >
         <select v-model="selectedContinent" class="filter-select">
           <option value="">All Continents</option>
           <option v-for="(count, continent) in continentCounts" :key="continent" :value="continent">
@@ -454,30 +462,19 @@
 
   <script>
   new Vue({
-    el: '#webstore',
-    data: {
-      message: "Hydro's Language School",
-      showProduct: true,
-      toastMessage: '',
-      toastType: '',
-      selectedContinent: '',
-      sortOrder: '',
-      products: [
-        { id: 1001, title: 'English Language', description: 'Dive in and uplift your English literature.', image: 'images/ukflag.webp', location: 'BIRMINGHAM', continent: 'Europe', availableInventory: 7, price: 2000 },
-        { id: 1002, title: 'French', description: 'Learn rich French dialects and communication styles.', image: 'images/frenchflag.webp', location: 'PARIS', continent: 'Europe', availableInventory: 5, price: 1800 },
-        { id: 1003, title: 'Spanish', description: 'Learn rich Spanish dialects and communication styles.', image: 'images/spanishflag.webp', location: 'MADRID', continent: 'Europe', availableInventory: 7, price: 1800 },
-        { id: 1004, title: 'Chinese', description: 'Learn rich Chinese dialects and communication styles.', image: 'images/chineseflag.webp', location: 'HONG-KONG', continent: 'Asia', availableInventory: 10, price: 1800 },
-        { id: 1005, title: 'Hindi', description: 'Learn rich Hindi dialects and communication styles.', image: 'images/hindiflag.webp', location: 'MUMBAI', continent: 'Asia', availableInventory: 12, price: 1800 },
-        { id: 1006, title: 'Arabic', description: 'Learn rich Arabic dialects and communication styles.', image: 'images/arabicflag.webp', location: 'CAIRO', continent: 'Africa', availableInventory: 14, price: 1800 },
-        { id: 1007, title: 'Russian', description: 'Learn rich Russian dialects and communication styles.', image: 'images/russianflag.webp', location: 'MOSCOW', continent: 'Europe', availableInventory: 5, price: 1800 },
-        { id: 1008, title: 'Nigerian Pidgin', description: 'Learn rich Nigerian dialects and communication styles.', image: 'images/nigerianflag.webp', location: 'LAGOS', continent: 'Africa', availableInventory: 9, price: 1800 },
-        { id: 1009, title: 'Italian', description: 'Learn rich Italian dialects and communication styles.', image: 'images/italianflag.webp', location: 'MILAN', continent: 'Europe', availableInventory: 11, price: 1800 },
-        { id: 1010, title: 'Korean', description: 'Learn rich Korean dialects and communication styles.', image: 'images/kpreanflag.jpeg', location: 'SEOUL', continent: 'Asia', availableInventory: 9, price: 1800 },
-        { id: 1011, title: 'Portuguese', description: 'Learn rich Portuguese dialects and communication styles.', image: 'images/portuflag.webp', location: 'LISBON', continent: 'Europe', availableInventory: 6, price: 1800 }
-      ],
-      cart: [],
-      order: { name: '', surname: '', address: '', city: '', state: '', zip: '', phone: '', gift: false, method: '' }
-    },
+   el: '#webstore',
+  data: {
+    message: "Hydro's Language School",
+    showProduct: true,
+    products: [],
+    cart: [],
+    selectedContinent: "",
+    sortOrder: "",
+    toastMessage: "",
+    toastType: "",
+    searchQuery: '',
+    order: { name:'', surname:'', address:'', city:'', state:'', zip:'', phone:'', gift:false }
+  },
 
     computed: {
       filteredProducts() {
@@ -520,6 +517,16 @@
     },
 
     methods: {
+      async fetchLessons() {
+      const res = await fetch('http://localhost:3000/api/lessons');
+      this.products = await res.json();
+    },
+    async searchLessons() {
+      if(!this.searchQuery) return this.fetchLessons();
+      const res = await fetch(`http://localhost:3000/api/search?q=${encodeURIComponent(this.searchQuery)}`);
+      this.products = await res.json();
+    },
+
       showCheckout() {
         if (this.cart.length === 0) {
           this.showToast('Cart is empty! Add items first.', 'error');
@@ -555,15 +562,56 @@
         this.toastType = type;
         setTimeout(() => this.toastMessage = '', 2500);
       },
-      submitForm() {
-        if (!this.order.name || !this.order.surname || !this.order.address || !this.order.city || !this.order.state || !this.order.phone) {
-          this.showToast('Please fill in all fields.', 'error');
-          return;
-        }
-        alert('Order placed successfully!');
-        this.cart = [];
-        this.showProduct = true;
-      }
+      async submitForm() {
+  if (!this.order.name || !this.order.surname || !this.order.address || 
+      !this.order.city || !this.order.state || !this.order.phone) {
+    this.showToast('Please fill in all fields.', 'error');
+    return;
+  }
+
+  if (this.cart.length === 0) {
+    this.showToast('Cart is empty!', 'error');
+    return;
+  }
+
+  // Convert cart items into array of _id fields for backend
+  const lessonIDs = this.cart.map(item => item._id);
+
+  // Total number of spaces (cart items)
+  const numberOfSpaces = this.cart.length;
+
+  try {
+    const res = await fetch('http://localhost:3000/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: this.order.name + " " + this.order.surname,
+        phoneNumber: this.order.phone,
+        lessonIDs: lessonIDs,
+        numberOfSpaces: numberOfSpaces
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      this.showToast('Order placed successfully!', 'success');
+
+      // Reset cart + form
+      this.cart = [];
+      this.order = { name:'', surname:'', address:'', city:'', state:'', zip:'', phone:'', gift:false };
+      this.showProduct = true;
+    } else {
+      this.showToast(data.error || 'Order failed.', 'error');
+    }
+
+  } catch (err) {
+    this.showToast('Server error: ' + err.message, 'error');
+  }
+}
+    },
+    mounted() {
+  this.fetchLessons();
     }
   });
   </script>
