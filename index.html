@@ -195,12 +195,12 @@
 
     methods: {
       async fetchLessons() {
-      const res = await fetch('http://localhost:3000/api/lessons');
+      const res = await fetch('https://hydro-zvhs.onrender.com/api/lessons');
       this.products = await res.json();
     },
     async searchLessons() {
       if(!this.searchQuery) return this.fetchLessons();
-      const res = await fetch(`http://localhost:3000/api/search?q=${encodeURIComponent(this.searchQuery)}`);
+      const res = await fetch(`http://hydro-zvhs.onrender.com/api/search?q=${encodeURIComponent(this.searchQuery)}`);
       this.products = await res.json();
     },
 
@@ -258,7 +258,7 @@
   const numberOfSpaces = this.cart.length;
 
   try {
-    const res = await fetch('http://localhost:3000/api/orders', {
+    const res = await fetch('http://hydro-zvhs.onrender.com/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

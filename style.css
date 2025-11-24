@@ -7,7 +7,7 @@
       color: #e6edf3;
     }
 
-    /* HEADER */
+   
     header {
       position: fixed;
       top: 0;
@@ -87,7 +87,7 @@
       padding: 120px 40px 40px;
     }
 
-    /* PRODUCT LIST */
+    
     .products-container {
       display: flex;
       flex-wrap: wrap;
@@ -150,7 +150,7 @@
       cursor: not-allowed;
     }
 
-    /* CHECKOUT */
+    
     .checkout-container {
       display: flex;
       justify-content: space-between;
@@ -198,7 +198,7 @@
       background: #3182ff;
     }
 
-    /* CART */
+    
     .cart-summary h2 {
       text-align: center;
       color: #58a6ff;
@@ -246,7 +246,7 @@
       background: #f85149;
     }
 
-    /* TOAST */
+   
     .toast {
       position: fixed;
       top: 80px;
@@ -275,7 +275,7 @@
       .checkout-container { flex-direction: column; }
     }
 
-    /* FOOTER */
+    
     footer {
       background: #0b0f14;
       color: #c9d1d9;
