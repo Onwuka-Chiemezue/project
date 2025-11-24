@@ -12,7 +12,7 @@
 
 <body>
   <div id="webstore">
-    <!-- HEADER -->
+    
     <header>
       <div class="header-left">
         <h1>{{ message }}</h1>
@@ -200,7 +200,7 @@
     },
     async searchLessons() {
       if(!this.searchQuery) return this.fetchLessons();
-      const res = await fetch(`http://hydro-zvhs.onrender.com/api/search?q=${encodeURIComponent(this.searchQuery)}`);
+      const res = await fetch(`https://hydro-zvhs.onrender.com/api/search?q=${encodeURIComponent(this.searchQuery)}`);
       this.products = await res.json();
     },
 
